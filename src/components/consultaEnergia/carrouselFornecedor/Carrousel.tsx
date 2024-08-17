@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Fornecedor } from "../Consulta";
 import { useSpring, animated } from '@react-spring/web';
-
-// Importe o ícone do WhatsApp
-import whatsappIcon from "../../../assets/whatsapp-icon.png"; 
+import { FaWhatsapp } from 'react-icons/fa'; // Importe o ícone do WhatsApp
 
 interface CarrosselFornecedorProps {
   fornecedores: Fornecedor[];
@@ -117,11 +115,7 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
                     <p>{fornecedor.estado}</p>
                     <p>R${fornecedor.custo_por_kwh.toFixed(2)}/kWh</p>
                     <div className="flex items-center justify-center mt-4">
-                      <img
-                        src={whatsappIcon}
-                        alt="WhatsApp"
-                        className="w-6 h-6 mr-2"
-                      />
+                      <FaWhatsapp className="w-6 h-6 mr-2 text-green-500" />
                       <span>Entrar em contato</span>
                     </div>
                   </div>
