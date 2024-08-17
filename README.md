@@ -1,4 +1,3 @@
-
 # Projeto Fornecedores de Energia
 
 Este projeto é uma aplicação web para consultar e adicionar fornecedores de energia elétrica. Ele permite aos usuários buscar fornecedores com base em seu consumo de energia e adicionar novos fornecedores ao sistema.
@@ -42,38 +41,38 @@ Antes de rodar o projeto, você precisará de:
 
 2. **Instale as Dependências**:
 
-  - Navegue até o diretório do backend e crie um ambiente virtual:
+- Navegue até o diretório do backend e crie um ambiente virtual:
 
-   ```cd backend
-    python -m venv venv
-    source venv/bin/activate  # Para Windows use: venv\Scripts\activate
-    pip install -r requirements.txt
-
-2. **Inicie o servidor**:
-
-  - Navegue até o diretório do backend e crie um ambiente virtual:
-
-   ```uvicorn main:app --reload
-    O servidor estará disponível em http://127.0.0.1:8000
-
-### FrontEnd
-
-
-1. **Clone o Repositório**:
-
-   ```bash
-   git clone https://github.com/ImGlic/consult_energy.git
-   cd consult_energy
-
-2. **Instale as Dependências**:  
-
-  -npm install
-  
+```cd backend
+ python -m venv venv
+ source venv/bin/activate  # Para Windows use: venv\Scripts\activate
+ pip install -r requirements.txt
 
 3. **Inicie o servidor**:
 
-  - npm start
-  ```O frontend estará disponível em http://localhost:3000
+- Navegue até o diretório do backend e crie um ambiente virtual:
+
+```uvicorn main:app --reload
+ O servidor estará disponível em http://127.0.0.1:8000
+
+
+### FrontEnd
+
+1. **Clone o Repositório**:
+
+```bash
+git clone https://github.com/ImGlic/consult_energy.git
+cd consult_energy
+
+2. **Instale as Dependências**:
+
+-npm install
+
+
+3. **Inicie o servidor**:
+
+- npm start
+```O frontend estará disponível em http://localhost:3000
 
 
 ### Estrutura do Projeto
@@ -81,6 +80,7 @@ Antes de rodar o projeto, você precisará de:
 *frontend/: Contém o código-fonte do frontend, incluindo componentes React e configurações do projeto.
 *backend/: Contém o código-fonte do backend, incluindo a API desenvolvida com FastAPI.
 
- 
 
 
+
+````
