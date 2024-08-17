@@ -18,8 +18,8 @@ const AdicionarFornecedor: React.FC = () => {
     logo: "",
     estado: "",
     custo_por_kwh: "0.0",
-    limite_minimo_kwh: "",
-    numero_total_clientes: "",
+    limite_minimo_kwh: 0,
+    numero_total_clientes: 0,
     avaliacao_media: 0,
   });
   const [error, setError] = useState<string | null>(null);
@@ -139,7 +139,7 @@ const AdicionarFornecedor: React.FC = () => {
             label="Limite Mínimo kWh"
             id="limite_minimo_kwh"
             type="number"
-            value={fornecedor.limite_minimo_kwh}
+            value={fornecedor.limite_minimo_kwh.toString()}
             onChange={handleInputChange}
             placeholder="Digite o limite mínimo kWh"
           />
@@ -147,7 +147,7 @@ const AdicionarFornecedor: React.FC = () => {
             label="Número Total de Clientes"
             id="numero_total_clientes"
             type="number"
-            value={fornecedor.numero_total_clientes}
+            value={fornecedor.numero_total_clientes.toString()}
             onChange={handleInputChange}
             placeholder="Digite o número total de clientes"
           />
@@ -155,10 +155,7 @@ const AdicionarFornecedor: React.FC = () => {
             label="Avaliação Média"
             id="avaliacao_media"
             type="number"
-            step="0.1"
-            min="0"
-            max="5"
-            value={fornecedor.avaliacao_media}
+            value={fornecedor.avaliacao_media.toString()}
             onChange={handleInputChange}
             placeholder="Digite a avaliação média"
           />
