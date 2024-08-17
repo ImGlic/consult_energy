@@ -1,50 +1,86 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Projeto Fornecedores de Energia
 
-Currently, two official plugins are available:
+Este projeto é uma aplicação web para consultar e adicionar fornecedores de energia elétrica. Ele permite aos usuários buscar fornecedores com base em seu consumo de energia e adicionar novos fornecedores ao sistema.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Funcionalidades
 
-## Expanding the ESLint configuration
+### Consulta de Fornecedores
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Buscar Fornecedores**: Permite que os usuários pesquisem fornecedores de energia elétrica com base no consumo mensal informado.
+- **Carrossel de Fornecedores**: Exibe os fornecedores encontrados em um carrossel interativo, mostrando detalhes como nome, logo, estado e custo por kWh.
 
-- Configure the top-level `parserOptions` property like this:
+### Adicionar Fornecedor
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **Formulário de Adição**: Permite que os usuários adicionem novos fornecedores ao sistema, fornecendo informações como nome, logo, estado, custo por kWh, limite mínimo kWh, número total de clientes e avaliação média.
+- **Validações**: Garante que campos obrigatórios não estejam vazios e que os valores sejam válidos antes de enviar o formulário.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Tecnologias Utilizadas
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- **Frontend**: React com TypeScript, Tailwind CSS
+- **Backend**: FastAPI
+- **Animações**: react-spring
+- **Ícones**: react-icons
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Pré-requisitos
+
+Antes de rodar o projeto, você precisará de:
+
+- Node.js e npm instalados (para o frontend)
+- Python e pip instalados (para o backend)
+- Ambiente virtual Python (opcional, mas recomendado para o backend)
+
+## Configuração e Execução
+
+### Backend
+
+1. **Clone o Repositório**:
+
+   ```bash
+   git clone https://github.com/ImGlic/api_consult-energy.git
+   cd api_consult-energy```
+
+2. **Instale as Dependências**:
+
+  - Navegue até o diretório do backend e crie um ambiente virtual:
+
+   ```cd backend
+    python -m venv venv
+    source venv/bin/activate  # Para Windows use: venv\Scripts\activate
+    pip install -r requirements.txt```
+
+2. **Inicie o servidor**:
+
+  - Navegue até o diretório do backend e crie um ambiente virtual:
+
+   ```uvicorn main:app --reload
+    O servidor estará disponível em http://127.0.0.1:8000```
+
+### FrontEnd
+
+
+1. **Clone o Repositório**:
+
+   ```bash
+   git clone https://github.com/ImGlic/consult_energy.git
+   cd consult_energy```
+
+2. **Instale as Dependências**:  
+
+  -npm install
+  
+
+3. **Inicie o servidor**:
+
+  - npm start
+  ```O frontend estará disponível em http://localhost:3000```
+
+
+### Estrutura do Projeto
+
+frontend/: Contém o código-fonte do frontend, incluindo componentes React e configurações do projeto.
+backend/: Contém o código-fonte do backend, incluindo a API desenvolvida com FastAPI.
+
+ 
+
+
