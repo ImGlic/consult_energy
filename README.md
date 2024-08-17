@@ -78,6 +78,7 @@ Antes de rodar o projeto, você precisará de:
 3. **Inicie o servidor**:
 
 - npm start
+- npm run dev
 ```O frontend estará disponível em http://localhost:3000"```
 
 
