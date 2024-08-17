@@ -39,14 +39,17 @@ Antes de rodar o projeto, você precisará de:
    git clone https://github.com/ImGlic/api_consult-energy.git
    cd api_consult-energy
 
+   ```
+
 2. **Instale as Dependências**:
 
 - Navegue até o diretório do backend e crie um ambiente virtual:
 
-```cd backend
+````bash
+  cd backend
  python -m venv venv
  source venv/bin/activate  # Para Windows use: venv\Scripts\activate
- pip install -r requirements.txt
+ pip install -r requirements.txt```
 
 3. **Inicie o servidor**:
 
