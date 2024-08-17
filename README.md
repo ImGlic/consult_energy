@@ -46,43 +46,45 @@ Antes de rodar o projeto, você precisará de:
 - Navegue até o diretório do backend e crie um ambiente virtual:
 
   ```bash
-    cd backend
-    python -m venv venv
-    source venv/bin/activate  # Para Windows use: venv\Scripts\activate
-    pip install -r requirements.txt
+  cd backend
+  python -m venv venv
+  source venv/bin/activate  # Para Windows use: venv\Scripts\activate
+  pip install -r requirements.txt
   ```
 
 3. **Inicie o servidor**:
 
 - Navegue até o diretório do backend e crie um ambiente virtual:
 
-```uvicorn main:app --reload
- O servidor estará disponível em http://127.0.0.1:8000
-
+  ```bash
+  uvicorn main:app --reload
+  O servidor estará disponível em http://127.0.0.1:8000
+  ```
 
 ### FrontEnd
 
 1. **Clone o Repositório**:
 
-```bash
-git clone https://github.com/ImGlic/consult_energy.git
-cd consult_energy
+  ```bash
+  git clone https://github.com/ImGlic/consult_energy.git
+  cd consult_energy
+  ```
 
 2. **Instale as Dependências**:
 
--npm install
+- npm install
 
 
 3. **Inicie o servidor**:
 
 - npm start
-```O frontend estará disponível em http://localhost:3000
+```O frontend estará disponível em http://localhost:3000"```
 
 
 ### Estrutura do Projeto
 
-*frontend/: Contém o código-fonte do frontend, incluindo componentes React e configurações do projeto.
-*backend/: Contém o código-fonte do backend, incluindo a API desenvolvida com FastAPI.
+-frontend/: Contém o código-fonte do frontend, incluindo componentes React e configurações do projeto.
+-backend/: Contém o código-fonte do backend, incluindo a API desenvolvida com FastAPI.
 
 
 
