@@ -18,13 +18,12 @@ const AdicionarFornecedor: React.FC = () => {
     logo: "",
     estado: "",
     custo_por_kwh: "0.0",
-    limite_minimo_kwh: 0,
-    numero_total_clientes: 0,
+    limite_minimo_kwh: "",
+    numero_total_clientes: "",
     avaliacao_media: 0,
   });
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -42,6 +41,21 @@ const AdicionarFornecedor: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!fornecedor.nome.trim()) {
+      setError("O campo Nome é obrigatório.");
+      return;
+    }
+    if (fornecedor.custo_por_kwh.trim() == "0,0") {
+      setError("O campo Custo por kWh deve ser maior que 0,0.");
+      return;
+    }
+    if (fornecedor.limite_minimo_kwh <= 0) {
+      setError("O campo Limite Mínimo kWh deve ser maior que 0");
+      return;
+    }
+
+    setError(null);
 
     try {
       const response = await fetch(
@@ -66,12 +80,11 @@ const AdicionarFornecedor: React.FC = () => {
         nome: "",
         logo: "",
         estado: "",
-        custo_por_kwh: "",
+        custo_por_kwh: "0.0",
         limite_minimo_kwh: 0,
         numero_total_clientes: 0,
         avaliacao_media: 0,
       });
-      setError(null);
       setSuccessMessage("Fornecedor adicionado com sucesso!");
     } catch (error: any) {
       setError(error.message);
@@ -125,7 +138,7 @@ const AdicionarFornecedor: React.FC = () => {
           <Input
             label="Limite Mínimo kWh"
             id="limite_minimo_kwh"
-            type="text"
+            type="number"
             value={fornecedor.limite_minimo_kwh}
             onChange={handleInputChange}
             placeholder="Digite o limite mínimo kWh"
@@ -141,7 +154,7 @@ const AdicionarFornecedor: React.FC = () => {
           <Input
             label="Avaliação Média"
             id="avaliacao_media"
-            type="text"
+            type="number"
             step="0.1"
             min="0"
             max="5"
@@ -152,7 +165,13 @@ const AdicionarFornecedor: React.FC = () => {
         </div>
 
         {error && (
-          <div className="flex justify-center text-red-500">{error}</div>
+          <div className="flex justify-center text-red-500 mb-4">{error}</div>
+        )}
+
+        {successMessage && (
+          <div className="flex justify-center text-green-500 mb-4">
+            {successMessage}
+          </div>
         )}
 
         <div className="flex justify-between mt-6">
@@ -162,11 +181,6 @@ const AdicionarFornecedor: React.FC = () => {
           >
             Voltar
           </Link>
-          {successMessage && (
-            <div className="flex justify-center items-center text-green-500 mb-4">
-              {successMessage}
-            </div>
-          )}
           <button
             type="submit"
             className="bg-black text-white px-4 py-2 rounded-md shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
