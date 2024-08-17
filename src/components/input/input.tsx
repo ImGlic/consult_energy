@@ -22,7 +22,7 @@ const TextArea: React.FC<InputProps> = (props: InputProps) => {
         id={props.id}
         type={props.type}
         value={props.value}
-        onChange={props.onChange} // Adicionando onChange ao input
+        onChange={props.onChange} 
         className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
         placeholder={props.placeholder}
       />

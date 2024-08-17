@@ -1,8 +1,8 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { Link } from "react-router-dom"; // Importe o Link
+import { Link } from "react-router-dom";
 import Input from "../input";
 
-interface Fornecedor {
+export interface Fornecedor {
   nome: string;
   logo: string;
   estado: string;
@@ -12,44 +12,64 @@ interface Fornecedor {
   avaliacao_media: number;
 }
 
-const Consulta: React.FC = () => {
-  const [consumo, setConsumo] = useState<string>("");
-  const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
+const AdicionarFornecedor: React.FC = () => {
+  const [fornecedor, setFornecedor] = useState<Fornecedor>({
+    nome: "",
+    logo: "",
+    estado: "",
+    custo_por_kwh: 0,
+    limite_minimo_kwh: 0,
+    numero_total_clientes: 0,
+    avaliacao_media: 0,
+  });
   const [error, setError] = useState<string | null>(null);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setConsumo(e.target.value);
+    const { id, value } = e.target;
+    setFornecedor((prevFornecedor) => ({
+      ...prevFornecedor,
+      [id]:
+        id === "custo_por_kwh" ||
+        id === "limite_minimo_kwh" ||
+        id === "numero_total_clientes" ||
+        id === "avaliacao_media"
+          ? parseFloat(value)
+          : value,
+    }));
   };
 
-  const handleSearch = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
-    if (consumo.trim() === "") {
-      setError("Por favor, informe o consumo mensal.");
-      return;
-    }
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/escolha?consumo=${consumo}`,
+        `http://127.0.0.1:8000/add_fornecedor?fornecedor=${fornecedor}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ consumo: parseInt(consumo) }),
+          body: JSON.stringify(fornecedor),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Erro ao buscar fornecedores");
-      }
-      const data: Fornecedor[] = await response.json();
-      if (data.length === 0) {
-        throw new Error("Não existe fornecedores que atendam nessas condições");
+        throw new Error("Erro ao adicionar fornecedor");
       }
 
-      setFornecedores(data);
+      const data = await response.json();
+      console.log("Fornecedor adicionado com sucesso:", data);
+
+      // Limpar os campos do formulário após a submissão bem-sucedida
+      setFornecedor({
+        nome: "",
+        logo: "",
+        estado: "",
+        custo_por_kwh: 0,
+        limite_minimo_kwh: 0,
+        numero_total_clientes: 0,
+        avaliacao_media: 0,
+      });
       setError(null);
     } catch (error: any) {
       setError(error.message);
@@ -60,35 +80,92 @@ const Consulta: React.FC = () => {
     <div className="w-screen flex items-center justify-center">
       <form
         className="w-1/2 bg-slate-800 shadow-md rounded-3xl px-8 pt-6 pb-6 mb-4"
-        onSubmit={handleSearch}
+        onSubmit={handleSubmit}
       >
         <div className="flex justify-center mb-8 pb-6">
-          <h1 className="text-white text-2xl ml-5">Cadastrar - Fornecedores</h1>
+          <h1 className="text-white text-2xl ml-5">Adicionar Fornecedor</h1>
         </div>
-        <div className="flex flex-row justify-around items-center mb-8 pb-6">
+
+        <div className="flex flex-col mb-4">
           <Input
-            label="Nome do Fornecedor"
-            id="descricao"
+            label="Nome"
+            id="nome"
             type="text"
-            value={consumo}
+            value={fornecedor.nome}
             onChange={handleInputChange}
-            placeholder="Digite o nome do Fornecedor"
+            placeholder="Digite o nome do fornecedor"
+          />
+          <Input
+            label="Logo"
+            id="logo"
+            type="text"
+            value={fornecedor.logo}
+            onChange={handleInputChange}
+            placeholder="Digite o nome do arquivo da logo"
+          />
+          <Input
+            label="Estado"
+            id="estado"
+            type="text"
+            value={fornecedor.estado}
+            onChange={handleInputChange}
+            placeholder="Digite o estado"
+          />
+          <Input
+            label="Custo por kWh"
+            id="custo_por_kwh"
+            type="number"
+            value={fornecedor.custo_por_kwh}
+            onChange={handleInputChange}
+            placeholder="Digite o custo por kWh"
+          />
+          <Input
+            label="Limite Mínimo kWh"
+            id="limite_minimo_kwh"
+            type="number"
+            value={fornecedor.limite_minimo_kwh}
+            onChange={handleInputChange}
+            placeholder="Digite o limite mínimo kWh"
+          />
+          <Input
+            label="Número Total de Clientes"
+            id="numero_total_clientes"
+            type="number"
+            value={fornecedor.numero_total_clientes}
+            onChange={handleInputChange}
+            placeholder="Digite o número total de clientes"
+          />
+          <Input
+            label="Avaliação Média"
+            id="avaliacao_media"
+            type="float"
+            step="0.1"
+            min="0"
+            max="5"
+            value={fornecedor.avaliacao_media}
+            onChange={handleInputChange}
+            placeholder="Digite a avaliação média"
           />
         </div>
 
-        <div className="flex justify-between">
-          <Link to="/" className="text-white mt-10 hover:text-[#383131]">
+        {error && (
+          <div className="flex justify-center text-red-500">{error}</div>
+        )}
+
+        <div className="flex justify-between mt-6">
+          <Link to="/" className="flex items-center text-white hover:text-gray-400">
             Voltar
           </Link>
-
-          <button id="Cadastrar" className="bg-black mt-7">
-            Cadastrar
+          <button
+            type="submit"
+            className="bg-black text-white px-4 py-2 rounded-md shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+          >
+            Adicionar
           </button>
         </div>
-        {error && <div className="text-red-500">{error}</div>}
       </form>
     </div>
   );
 };
 
-export default Consulta;
+export default AdicionarFornecedor;
