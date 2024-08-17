@@ -45,11 +45,12 @@ Antes de rodar o projeto, você precisará de:
 
 - Navegue até o diretório do backend e crie um ambiente virtual:
 
-````bash
-  cd backend
- python -m venv venv
- source venv/bin/activate  # Para Windows use: venv\Scripts\activate
- pip install -r requirements.txt```
+  ```bash
+    cd backend
+    python -m venv venv
+    source venv/bin/activate  # Para Windows use: venv\Scripts\activate
+    pip install -r requirements.txt
+  ```
 
 3. **Inicie o servidor**:
 
