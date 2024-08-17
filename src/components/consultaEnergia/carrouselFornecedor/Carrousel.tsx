@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Fornecedor } from "../Consulta";
 import { useSpring, animated } from '@react-spring/web';
-import { FaWhatsapp } from 'react-icons/fa'; // Importe o ícone do WhatsApp
+import { FaWhatsapp } from 'react-icons/fa'; 
 
 interface CarrosselFornecedorProps {
   fornecedores: Fornecedor[];
