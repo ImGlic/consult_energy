@@ -83,10 +83,7 @@ Antes de rodar o projeto, você precisará de:
 
 ### Estrutura do Projeto
 
--frontend/: Contém o código-fonte do frontend, incluindo componentes React e configurações do projeto.
--backend/: Contém o código-fonte do backend, incluindo a API desenvolvida com FastAPI.
+- frontend/: Contém o código-fonte do frontend, incluindo componentes React e configurações do projeto.
+- backend/: Contém o código-fonte do backend, incluindo a API desenvolvida com FastAPI.
 
 
-
-
-````
