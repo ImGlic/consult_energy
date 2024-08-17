@@ -1,8 +1,9 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { Link } from "react-router-dom"; // Importe o Link
 import Input from "../input";
+import CarrosselFornecedor from "./carrouselFornecedor/index.tsx"; // Importe o carrossel
 
-interface Fornecedor {
+export interface Fornecedor {
   nome: string;
   logo: string;
   estado: string;
@@ -46,6 +47,8 @@ const Consulta: React.FC = () => {
       }
       const data: Fornecedor[] = await response.json();
       if (data.length === 0) {
+        setFornecedores([]);
+        setError(null);
         throw new Error("Não existe fornecedores que atendam nessas condições");
       }
 
@@ -80,26 +83,19 @@ const Consulta: React.FC = () => {
           </button>
         </div>
 
-        {error && <div className="text-red-500">{error}</div>}
+        {error && <div className="flex justify-center text-red-500">{error}</div>}
 
         <div className="flex flex-col justify-between mb-8 pb-6">
           {fornecedores.length > 0 && (
-            <div className="text-white">
-              <h2 className="text-xl mb-4">Fornecedores Disponíveis:</h2>
-              <ul>
-                {fornecedores.map((fornecedor) => (
-                  <li key={fornecedor.nome} className="mb-2">
-                    <strong>{fornecedor.nome}</strong> - {fornecedor.estado} -
-                    R${fornecedor.custo_por_kwh}/kWh
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <CarrosselFornecedor fornecedores={fornecedores} />
           )}
         </div>
 
         <div className="flex justify-center">
-          <Link to="/cadastrar_fornecedor" className="text-white  hover:text-[#383131]">
+          <Link
+            to="/cadastrar_fornecedor"
+            className="text-white  hover:text-[#383131]"
+          >
             Novo Fornecedor
           </Link>
         </div>
