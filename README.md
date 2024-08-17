@@ -38,7 +38,7 @@ Antes de rodar o projeto, você precisará de:
 
    ```bash
    git clone https://github.com/ImGlic/api_consult-energy.git
-   cd api_consult-energy```
+   cd api_consult-energy
 
 2. **Instale as Dependências**:
 
@@ -47,14 +47,14 @@ Antes de rodar o projeto, você precisará de:
    ```cd backend
     python -m venv venv
     source venv/bin/activate  # Para Windows use: venv\Scripts\activate
-    pip install -r requirements.txt```
+    pip install -r requirements.txt
 
 2. **Inicie o servidor**:
 
   - Navegue até o diretório do backend e crie um ambiente virtual:
 
    ```uvicorn main:app --reload
-    O servidor estará disponível em http://127.0.0.1:8000```
+    O servidor estará disponível em http://127.0.0.1:8000
 
 ### FrontEnd
 
@@ -63,7 +63,7 @@ Antes de rodar o projeto, você precisará de:
 
    ```bash
    git clone https://github.com/ImGlic/consult_energy.git
-   cd consult_energy```
+   cd consult_energy
 
 2. **Instale as Dependências**:  
 
@@ -73,7 +73,7 @@ Antes de rodar o projeto, você precisará de:
 3. **Inicie o servidor**:
 
   - npm start
-  ```O frontend estará disponível em http://localhost:3000```
+  ```O frontend estará disponível em http://localhost:3000
 
 
 ### Estrutura do Projeto
