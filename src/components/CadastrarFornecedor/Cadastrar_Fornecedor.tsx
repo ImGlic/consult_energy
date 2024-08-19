@@ -6,7 +6,7 @@ export interface Fornecedor {
   nome: string;
   logo: string;
   estado: string;
-  custo_por_kwh: string;
+  custo_por_kwh: number;
   limite_minimo_kwh: number;
   numero_total_clientes: number;
   avaliacao_media: number;
@@ -17,7 +17,7 @@ const AdicionarFornecedor: React.FC = () => {
     nome: "",
     logo: "",
     estado: "",
-    custo_por_kwh: "0.0",
+    custo_por_kwh: 0,
     limite_minimo_kwh: 0,
     numero_total_clientes: 0,
     avaliacao_media: 0,
@@ -46,7 +46,7 @@ const AdicionarFornecedor: React.FC = () => {
       setError("O campo Nome é obrigatório.");
       return;
     }
-    if (fornecedor.custo_por_kwh.trim() == "0,0") {
+    if (!fornecedor.custo_por_kwh) {
       setError("O campo Custo por kWh deve ser maior que 0,0.");
       return;
     }
@@ -80,7 +80,7 @@ const AdicionarFornecedor: React.FC = () => {
         nome: "",
         logo: "",
         estado: "",
-        custo_por_kwh: "0.0",
+        custo_por_kwh: 0,
         limite_minimo_kwh: 0,
         numero_total_clientes: 0,
         avaliacao_media: 0,
@@ -131,7 +131,7 @@ const AdicionarFornecedor: React.FC = () => {
             label="Custo por kWh"
             id="custo_por_kwh"
             type="number"
-            value={fornecedor.custo_por_kwh}
+            value={fornecedor.custo_por_kwh.toString()}
             onChange={handleInputChange}
             placeholder="Digite o custo por kWh"
           />
