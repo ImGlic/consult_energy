@@ -59,7 +59,7 @@ const AdicionarFornecedor: React.FC = () => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/add_fornecedor?fornecedor=${fornecedor}`,
+        `http://127.0.0.1:8000/fornecedores/adicionar?fornecedor=${fornecedor}`,
         {
           method: "POST",
           headers: {
