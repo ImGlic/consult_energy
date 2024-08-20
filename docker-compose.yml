@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  tutor_django:
+  consult_energy_frontend:
     container_name: consult_energy_frontend
     build:
       context: .
