@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { Link } from "react-router-dom"; // Importe o Link
+import { Link } from "react-router-dom";
 import Input from "../input";
-import CarrosselFornecedor from "./carrouselFornecedor/index.tsx"; // Importe o carrossel
+import CarrosselFornecedor from "./carrouselFornecedor/index.tsx";
 
 export interface Fornecedor {
   nome: string;
@@ -32,19 +32,20 @@ const Consulta: React.FC = () => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/fornecedores/consultar?consumo=${consumo}`,
+        `consult_energy_backend/fornecedores/consultar?consumo=${consumo}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ consumo: parseInt(consumo) }),
+          body: JSON.stringify({ consumo: parseFloat(consumo) }),
         }
       );
 
       if (!response.ok) {
         throw new Error("Erro ao buscar fornecedores");
       }
+
       const data: Fornecedor[] = await response.json();
       if (data.length === 0) {
         setFornecedores([]);
@@ -60,30 +61,41 @@ const Consulta: React.FC = () => {
   };
 
   return (
-    <div className="w-screen flex items-center justify-center">
+    <div className="w-screen flex items-center justify-center px-4 sm:px-6 md:px-8">
       <form
-        className="w-1/2 bg-slate-800 shadow-md rounded-3xl px-8 pt-6 pb-6 mb-4"
+        className="w-full sm:w-3/4 lg:w-1/2 bg-slate-800 shadow-md rounded-3xl px-8 pt-6 pb-6 mb-4"
         onSubmit={handleSearch}
       >
         <div className="flex justify-center mb-8 pb-6">
           <h1 className="text-white text-2xl ml-5">Buscar - Fornecedores</h1>
         </div>
-        <div className="flex flex-row justify-around items-center mb-8 pb-6">
-          <Input
-            label="Consumo Mensal"
-            id="consumo"
-            type="number"
-            value={consumo}
-            onChange={handleInputChange}
-            placeholder="Digite o consumo mensal"
-          />
-          <span className="text-rose-700 text-white mt-8">kWh</span>
-          <button id="buscar" className="bg-black mt-7">
+
+        <div className="flex flex-col md:flex-row md:justify-around md:items-center md:space-x-4 mb-8 pb-6">
+          <div className="w-full md:w-auto">
+            <Input
+              label="Consumo Mensal"
+              id="consumo"
+              type="number"
+              value={consumo}
+              onChange={handleInputChange}
+              placeholder="Digite o consumo mensal"
+              
+            />
+          </div>
+
+          <span className="text-rose-700 text-white mt-4 md:mt-0">kWh</span>
+
+          <button
+            id="buscar"
+            className="bg-black text-white rounded-md py-2 px-6 mt-4 md:mt-0"
+          >
             Buscar
           </button>
         </div>
 
-        {error && <div className="flex justify-center text-red-500">{error}</div>}
+        {error && (
+          <div className="flex justify-center text-red-500 text-sm">{error}</div>
+        )}
 
         <div className="flex flex-col justify-between mb-8 pb-6">
           {fornecedores.length > 0 && (
@@ -94,7 +106,7 @@ const Consulta: React.FC = () => {
         <div className="flex justify-center">
           <Link
             to="/cadastrar_fornecedor"
-            className="text-white  hover:text-[#383131]"
+            className="text-white text-sm md:text-base hover:text-[#383131]"
           >
             Novo Fornecedor
           </Link>
