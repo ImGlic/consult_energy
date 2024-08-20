@@ -1,10 +1,11 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { Link } from "react-router-dom";
 import Input from "../input";
+import ImageInput from "../inputImage/index"; // Importando o novo componente de imagem
 
 export interface Fornecedor {
   nome: string;
-  logo: string;
+  logo: File | null;
   estado: string;
   custo_por_kwh: number;
   limite_minimo_kwh: number;
@@ -15,12 +16,12 @@ export interface Fornecedor {
 const AdicionarFornecedor: React.FC = () => {
   const [fornecedor, setFornecedor] = useState<Fornecedor>({
     nome: "",
-    logo: "",
+    logo: null,
     estado: "",
-    custo_por_kwh: 0,
+    custo_por_kwh: 0.0,
     limite_minimo_kwh: 0,
     numero_total_clientes: 0,
-    avaliacao_media: 0,
+    avaliacao_media: 0.0,
   });
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -29,13 +30,14 @@ const AdicionarFornecedor: React.FC = () => {
     const { id, value } = e.target;
     setFornecedor((prevFornecedor) => ({
       ...prevFornecedor,
-      [id]:
-        id === "custo_por_kwh" ||
-        id === "limite_minimo_kwh" ||
-        id === "numero_total_clientes" ||
-        id === "avaliacao_media"
-          ? parseFloat(value)
-          : value,
+      [id]: parseFloat(value) || value,
+    }));
+  };
+
+  const handleFileChange = (file: File | null) => {
+    setFornecedor((prevFornecedor) => ({
+      ...prevFornecedor,
+      logo: file,
     }));
   };
 
@@ -57,17 +59,23 @@ const AdicionarFornecedor: React.FC = () => {
 
     setError(null);
 
+    const formData = new FormData();
+    formData.append("nome", fornecedor.nome);
+    formData.append("estado", fornecedor.estado);
+    formData.append("custo_por_kwh", fornecedor.custo_por_kwh.toString());
+    formData.append("limite_minimo_kwh", fornecedor.limite_minimo_kwh.toString());
+    formData.append("numero_total_clientes", fornecedor.numero_total_clientes.toString());
+    formData.append("avaliacao_media", fornecedor.avaliacao_media.toString());
+
+    if (fornecedor.logo) {
+      formData.append("logo", fornecedor.logo);
+    }
+
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/fornecedores/adicionar?fornecedor=${fornecedor}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(fornecedor),
-        }
-      );
+      const response = await fetch(`consult_energy_backend/fornecedores/adicionar?fornecedor=${fornecedor}`, {
+        method: "POST",
+        body: formData,
+      });
 
       if (!response.ok) {
         throw new Error("Erro ao adicionar fornecedor");
@@ -78,7 +86,7 @@ const AdicionarFornecedor: React.FC = () => {
 
       setFornecedor({
         nome: "",
-        logo: "",
+        logo: null,
         estado: "",
         custo_por_kwh: 0,
         limite_minimo_kwh: 0,
@@ -95,7 +103,7 @@ const AdicionarFornecedor: React.FC = () => {
   return (
     <div className="w-screen flex items-center justify-center">
       <form
-        className="w-1/2 bg-slate-800 shadow-md rounded-3xl px-8 pt-6 pb-6 mb-4"
+        className="w-1/2 bg-slate-800 shadow-md lg:rounded-3xl lg:px-8 lg:pt-6 lg:pb-6 lg:mb-4"
         onSubmit={handleSubmit}
       >
         <div className="flex justify-center mb-8 pb-6">
@@ -111,13 +119,10 @@ const AdicionarFornecedor: React.FC = () => {
             onChange={handleInputChange}
             placeholder="Digite o nome do fornecedor"
           />
-          <Input
+          <ImageInput
             label="Logo"
             id="logo"
-            type="text"
-            value={fornecedor.logo}
-            onChange={handleInputChange}
-            placeholder="Digite o nome do arquivo da logo"
+            onFileChange={handleFileChange}
           />
           <Input
             label="Estado"
