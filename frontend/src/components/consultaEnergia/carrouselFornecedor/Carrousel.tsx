@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Fornecedor } from "../Consulta";
 import { useSpring, animated } from '@react-spring/web';
-import { FaWhatsapp } from 'react-icons/fa'; 
+import { FaWhatsapp } from 'react-icons/fa';
 
 interface CarrosselFornecedorProps {
   fornecedores: Fornecedor[];
@@ -14,7 +14,8 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
     transform: 'translateX(0%)',
     config: { tension: 300, friction: 30 },
   }));
-  const [imageCache, setImageCache] = useState<Map<string, string>>(new Map());
+
+  const [images, setImages] = useState<Map<string, string>>(new Map());
 
   const qtdItensPagina = 2;
   const totalItens = fornecedores.length;
@@ -23,25 +24,24 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
   useEffect(() => {
     const preloadImages = async () => {
       const imagePromises = fornecedores.map(async (fornecedor) => {
-        if (!imageCache.has(fornecedor.logo)) {
-          try {
-            const image = await import(`../../../assets/${fornecedor.logo}`);
-            imageCache.set(fornecedor.logo, image.default);
-          } catch (error) {
-            console.error(`Erro ao carregar imagem: ${fornecedor.logo}`, error);
-            imageCache.set(fornecedor.logo, '');
-          }
+        const logoPath = `../../../assets/${fornecedor.logo}`;
+        try {
+          const image = await import(`${logoPath}`);
+          images.set(fornecedor.logo, image.default);
+        } catch (error) {
+          console.error(`Erro ao carregar imagem: ${logoPath}`, error);
+          images.set(fornecedor.logo, ''); 
         }
       });
       await Promise.all(imagePromises);
-      setImageCache(new Map(imageCache)); 
+      setImages(new Map(images));
     };
 
     preloadImages();
-  }, [fornecedores, imageCache]);
+  }, [fornecedores]);
 
   const getImageUrl = (logo: string) => {
-    return imageCache.get(logo) || ''; 
+    return images.get(logo) || '';
   };
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
         prevIndex === 0 ? totalItens - qtdItensPagina : prevIndex - qtdItensPagina
       );
       setAnimationProps({ opacity: 1, transform: 'translateX(0%)' });
-    }, 300); 
+    }, 300);
   };
 
   const handleNext = () => {
@@ -67,7 +67,7 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
           : prevIndex + qtdItensPagina
       );
       setAnimationProps({ opacity: 1, transform: 'translateX(0%)' });
-    }, 300); 
+    }, 300);
   };
 
   const displayedFornecedores = fornecedores.slice(
