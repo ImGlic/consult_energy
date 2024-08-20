@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Fornecedor } from "../Consulta";
 import { useSpring, animated } from '@react-spring/web';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaWhatsapp, FaStar } from 'react-icons/fa';
 
 interface CarrosselFornecedorProps {
   fornecedores: Fornecedor[];
@@ -15,34 +15,30 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
     config: { tension: 300, friction: 30 },
   }));
 
-  const [images, setImages] = useState<Map<string, string>>(new Map());
-
-  const qtdItensPagina = 2;
-  const totalItens = fornecedores.length;
-  const totalPages = Math.ceil(totalItens / qtdItensPagina);
+  const [qtdItensPagina, setQtdItensPagina] = useState(2);
+  const [isLargeScreen, setIsLargeScreen] = useState<boolean>(window.innerWidth >= 960);
 
   useEffect(() => {
-    const preloadImages = async () => {
-      const imagePromises = fornecedores.map(async (fornecedor) => {
-        const logoPath = `../../../assets/${fornecedor.logo}`;
-        try {
-          const image = await import(`${logoPath}`);
-          images.set(fornecedor.logo, image.default);
-        } catch (error) {
-          console.error(`Erro ao carregar imagem: ${logoPath}`, error);
-          images.set(fornecedor.logo, ''); 
-        }
-      });
-      await Promise.all(imagePromises);
-      setImages(new Map(images));
+    const handleResize = () => {
+      if (window.innerWidth < 960) {
+        setQtdItensPagina(1);
+        setIsLargeScreen(false);
+      } else {
+        setQtdItensPagina(2);
+        setIsLargeScreen(true);
+      }
     };
 
-    preloadImages();
-  }, [fornecedores]);
+    window.addEventListener('resize', handleResize);
+    handleResize(); 
 
-  const getImageUrl = (logo: string) => {
-    return images.get(logo) || '';
-  };
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const totalItens = fornecedores.length;
+  const totalPages = Math.ceil(totalItens / qtdItensPagina);
 
   useEffect(() => {
     setAnimationProps({ opacity: 1, transform: 'translateX(0%)' });
@@ -51,8 +47,8 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
   const handlePrev = () => {
     setAnimationProps({ opacity: 0, transform: 'translateX(-100%)' });
     setTimeout(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === 0 ? totalItens - qtdItensPagina : prevIndex - qtdItensPagina
+      setCurrentIndex((prevIndex) => 
+        prevIndex === 0 ? Math.max(totalItens - qtdItensPagina, 0) : prevIndex - qtdItensPagina
       );
       setAnimationProps({ opacity: 1, transform: 'translateX(0%)' });
     }, 300);
@@ -77,6 +73,19 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
 
   const currentPage = Math.floor(currentIndex / qtdItensPagina) + 1;
 
+  const renderStars = (avaliacao_media: number) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <FaStar
+          key={i}
+          className={`w-4 h-4 ${i <= avaliacao_media ? 'text-yellow-400' : 'text-gray-400'}`}
+        />
+      );
+    }
+    return stars;
+  };
+
   return (
     <div className="relative w-full max-w-full mx-auto rounded-xl p-4">
       {fornecedores.length > 0 && (
@@ -97,15 +106,23 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
                 className="flex w-full"
                 style={animationProps}
               >
-                {displayedFornecedores.map((fornecedor) => (
+                {displayedFornecedores.map((fornecedor, index) => (
                   <div
                     key={fornecedor.nome}
-                    className="text-center text-white mx-2 flex-shrink-0 bg-gray-900 rounded-lg shadow-lg p-4"
-                    style={{ width: `calc(100% / ${qtdItensPagina})` }}
+                    className={`text-center text-white mx-2 flex-shrink-0 bg-gray-900 rounded-lg shadow-lg p-4 ${
+                      index !== displayedFornecedores.length - 1 ? 'mr-4' : ''
+                    }`}
+                    style={{ width: `calc(100% / ${qtdItensPagina} - 16px)` }} 
                   >
+                    <div className="flex flex-col justify-center mb-2">
+                      <p className="text-lg font-semibold mb-1">{fornecedor.avaliacao_media.toFixed(1)}</p>
+                      <div className="flex justify-center mb-2">
+                        {renderStars(fornecedor.avaliacao_media)}
+                      </div>
+                    </div>
                     <div className="flex justify-center mb-4">
                       <img
-                        src={getImageUrl(fornecedor.logo)}
+                        src={fornecedor.logo}
                         alt={fornecedor.nome}
                         className="max-w-full h-auto"
                         style={{ maxHeight: '100px', objectFit: 'contain' }}
@@ -114,10 +131,16 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
                     <h3 className="text-xl font-semibold">{fornecedor.nome}</h3>
                     <p>{fornecedor.estado}</p>
                     <p>R${fornecedor.custo_por_kwh.toFixed(2)}/kWh</p>
-                    <div className="flex items-center justify-center mt-4">
-                      <FaWhatsapp className="w-6 h-6 mr-2 text-green-500" />
+                    <p>Limite min:{fornecedor.limite_minimo_kwh}/kWh</p>
+                    <a
+                      href={`https://wa.me/${fornecedor.telefone}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center mt-4 bg-green-500 text-white py-2 px-4 rounded-lg"
+                    >
+                      <FaWhatsapp className="w-6 h-6 mr-2" />
                       <span>Entrar em contato</span>
-                    </div>
+                    </a>
                   </div>
                 ))}
               </animated.div>
@@ -134,9 +157,11 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
             )}
           </div>
 
-          <div className="text-center text-white mt-4">
-            Página {currentPage} de {totalPages}
-          </div>
+          {isLargeScreen && (
+            <div className="text-center text-white mt-4">
+              Página {currentPage} de {totalPages}
+            </div>
+          )}
         </>
       )}
     </div>

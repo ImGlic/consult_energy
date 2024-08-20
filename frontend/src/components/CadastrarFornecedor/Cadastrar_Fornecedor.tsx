@@ -1,27 +1,28 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { Link } from "react-router-dom";
 import Input from "../input";
-import ImageInput from "../inputImage/index"; // Importando o novo componente de imagem
 
 export interface Fornecedor {
   nome: string;
-  logo: File | null;
+  logo: string;
   estado: string;
   custo_por_kwh: number;
   limite_minimo_kwh: number;
   numero_total_clientes: number;
   avaliacao_media: number;
+  telefone: string;
 }
 
 const AdicionarFornecedor: React.FC = () => {
   const [fornecedor, setFornecedor] = useState<Fornecedor>({
     nome: "",
-    logo: null,
+    logo: "",
     estado: "",
-    custo_por_kwh: 0.0,
+    custo_por_kwh: 0,
     limite_minimo_kwh: 0,
     numero_total_clientes: 0,
-    avaliacao_media: 0.0,
+    avaliacao_media: 0,
+    telefone: "",
   });
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -30,14 +31,13 @@ const AdicionarFornecedor: React.FC = () => {
     const { id, value } = e.target;
     setFornecedor((prevFornecedor) => ({
       ...prevFornecedor,
-      [id]: parseFloat(value) || value,
-    }));
-  };
-
-  const handleFileChange = (file: File | null) => {
-    setFornecedor((prevFornecedor) => ({
-      ...prevFornecedor,
-      logo: file,
+      [id]:
+        id === "custo_por_kwh" ||
+        id === "limite_minimo_kwh" ||
+        id === "numero_total_clientes" ||
+        id === "avaliacao_media"
+          ? parseFloat(value)
+          : value,
     }));
   };
 
@@ -57,25 +57,24 @@ const AdicionarFornecedor: React.FC = () => {
       return;
     }
 
-    setError(null);
-
-    const formData = new FormData();
-    formData.append("nome", fornecedor.nome);
-    formData.append("estado", fornecedor.estado);
-    formData.append("custo_por_kwh", fornecedor.custo_por_kwh.toString());
-    formData.append("limite_minimo_kwh", fornecedor.limite_minimo_kwh.toString());
-    formData.append("numero_total_clientes", fornecedor.numero_total_clientes.toString());
-    formData.append("avaliacao_media", fornecedor.avaliacao_media.toString());
-
-    if (fornecedor.logo) {
-      formData.append("logo", fornecedor.logo);
+    if (fornecedor.avaliacao_media > 5) {
+      setError("O campo avaliação média não deve ser maior que 5");
+      return;
     }
 
+    setError(null);
+
     try {
-      const response = await fetch(`consult_energy_backend/fornecedores/adicionar?fornecedor=${fornecedor}`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `https://api.imglic.tech/fornecedores/adicionar?fornecedor=${fornecedor}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(fornecedor),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Erro ao adicionar fornecedor");
@@ -86,12 +85,13 @@ const AdicionarFornecedor: React.FC = () => {
 
       setFornecedor({
         nome: "",
-        logo: null,
+        logo: "",
         estado: "",
         custo_por_kwh: 0,
         limite_minimo_kwh: 0,
         numero_total_clientes: 0,
         avaliacao_media: 0,
+        telefone: "",
       });
       setSuccessMessage("Fornecedor adicionado com sucesso!");
     } catch (error: any) {
@@ -103,7 +103,7 @@ const AdicionarFornecedor: React.FC = () => {
   return (
     <div className="w-screen flex items-center justify-center">
       <form
-        className="w-1/2 bg-slate-800 shadow-md lg:rounded-3xl lg:px-8 lg:pt-6 lg:pb-6 lg:mb-4"
+        className="w-1/2 bg-slate-800 shadow-md rounded-3xl px-8 pt-6 pb-6 mb-4"
         onSubmit={handleSubmit}
       >
         <div className="flex justify-center mb-8 pb-6">
@@ -119,10 +119,13 @@ const AdicionarFornecedor: React.FC = () => {
             onChange={handleInputChange}
             placeholder="Digite o nome do fornecedor"
           />
-          <ImageInput
+          <Input
             label="Logo"
             id="logo"
-            onFileChange={handleFileChange}
+            type="text"
+            value={fornecedor.logo}
+            onChange={handleInputChange}
+            placeholder="Digite o nome do arquivo da logo"
           />
           <Input
             label="Estado"
@@ -143,7 +146,7 @@ const AdicionarFornecedor: React.FC = () => {
           <Input
             label="Limite Mínimo kWh"
             id="limite_minimo_kwh"
-            type="number"
+            type="text"
             value={fornecedor.limite_minimo_kwh.toString()}
             onChange={handleInputChange}
             placeholder="Digite o limite mínimo kWh"
@@ -163,6 +166,15 @@ const AdicionarFornecedor: React.FC = () => {
             value={fornecedor.avaliacao_media.toString()}
             onChange={handleInputChange}
             placeholder="Digite a avaliação média"
+          />
+
+          <Input
+            label="Telefone - (WhatsApp)"
+            id="telefone"
+            type="text"
+            value={fornecedor.telefone.toString()}
+            onChange={handleInputChange}
+            placeholder="(99) 99999-9999"
           />
         </div>
 

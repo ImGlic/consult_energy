@@ -11,6 +11,7 @@ export interface Fornecedor {
   limite_minimo_kwh: number;
   numero_total_clientes: number;
   avaliacao_media: number;
+  telefone: string; 
 }
 
 const Consulta: React.FC = () => {
@@ -32,7 +33,7 @@ const Consulta: React.FC = () => {
 
     try {
       const response = await fetch(
-        `consult_energy_backend/fornecedores/consultar?consumo=${consumo}`,
+        `https://api.imglic.tech/fornecedores/consultar?consumo=${consumo}`,
         {
           method: "POST",
           headers: {
