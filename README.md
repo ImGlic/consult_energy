@@ -89,14 +89,14 @@ Para buildar utilize
 
 Estamos utilizando o Docker nesse projeto, ao clonar. Para buildar e  iniciar o projeto com docker utilize 
 
-```bash 
-  Docker compose up --build
+  ```bash 
+    Docker compose up --build
   ```
 
 Caso for só iniciar o projeto utilize o comando 
 
-```bash 
-  Docker compose up
+  ```bash 
+    Docker compose up
   ```
 
 Para parar o docker pressione CRTL + C duas vezes 
@@ -105,8 +105,8 @@ Para parar o docker pressione CRTL + C duas vezes
 
 Digite no terminal o comando: 
 
-```bash 
-  Docker compose down 
+  ```bash 
+    Docker compose down 
   ```
 
 ### Estrutura do Projeto
