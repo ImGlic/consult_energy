@@ -109,7 +109,7 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
                 {displayedFornecedores.map((fornecedor, index) => (
                   <div
                     key={fornecedor.nome}
-                    className={`text-center text-white mx-2 flex-shrink-0 bg-gray-900 rounded-lg shadow-lg p-4 ${
+                    className={`text-center text-white mx-2 flex-shrink-0 bg-gray-900 rounded-lg shadow-lg p-4 content-evenly ${
                       index !== displayedFornecedores.length - 1 ? 'mr-4' : ''
                     }`}
                     style={{ width: `calc(100% / ${qtdItensPagina} - 16px)` }} 
@@ -136,10 +136,10 @@ const CarrosselFornecedor: React.FC<CarrosselFornecedorProps> = ({ fornecedores 
                       href={`https://wa.me/${fornecedor.telefone}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center mt-4 bg-green-500 text-white py-2 px-4 rounded-lg"
+                      className="flex items-center justify-center mt-4 bg-green-500 text-white py-2 px-4 rounded-lg hover:text-[#383131]"
                     >
                       <FaWhatsapp className="w-6 h-6 mr-2" />
-                      <span>Entrar em contato</span>
+                      <span className="hover:text-[#383131]">Entrar em contato</span>
                     </a>
                   </div>
                 ))}
